@@ -5,8 +5,8 @@ YUI_config = {
         sys: {
             base: 'module/sys/',
             modules: {
-                'sys-base': {
-                    path: 'base.js',
+                'sys': {
+                    path: 'sys.js',
                     requires: ['base'],
                     skinnable: false
                 }
@@ -16,24 +16,14 @@ YUI_config = {
         unit: {
             base: 'module/unit/',
             modules: {
-                'unit-base': {
-                    path: 'base.js',
+                'unit': {
+                    path: 'unit.js',
                     requires: ['base'],
                     skinnable: false
                 },
-                'unit-test': {
-                    path: 'test.js',
-                    requires: ['base', 'unit-base'],
-                    skinnable: false
-                },
-                'unit-ground': {
-                    path: 'ground.js',
-                    requires: ['base', 'unit-base'],
-                    skinnable: false
-                },
-                'unit-block': {
-                    path: 'block.js',
-                    requires: ['base', 'unit-base'],
+                'unit-mobile': {
+                    path: 'unit-mobile.js',
+                    requires: ['base', 'unit'],
                     skinnable: false
                 }
             }
@@ -41,8 +31,8 @@ YUI_config = {
         field: {
             base: 'module/field/',
             modules: {
-                'field-base': {
-                    path: 'base.js',
+                'field': {
+                    path: 'field.js',
                     requires: ['base'],
                     skinnable: false
                 }
@@ -52,13 +42,38 @@ YUI_config = {
         terrain: {
             base: 'module/terrain/',
             modules: {
-                'terrain-base': {
-                    path: 'base.js',
+                'terrain': {
+                    path: 'terrain.js',
                     requires: ['base'],
                     skinnable: false
                 },
                 'terrain-brick': {
-                    path: 'brick.js',
+                    path: 'terrain-brick.js',
+                    requires: ['base'],
+                    skinnable: false
+                },
+                'terrain-thing': {
+                    path: 'terrain-thing.js',
+                    requires: ['base', 'terrain'],
+                    skinnable: false
+                },
+                'terrain-ground': {
+                    path: 'terrain-ground.js',
+                    requires: ['base', 'terrain', 'terrain-thing'],
+                    skinnable: false
+                },
+                'terrain-block': {
+                    path: 'terrain-block.js',
+                    requires: ['base', 'terrain', 'terrain-thing'],
+                    skinnable: false
+                }
+            }
+        },
+        player: {
+            base: 'module/player/',
+            modules: {
+                'player': {
+                    path: 'player.js',
                     requires: ['base'],
                     skinnable: false
                 }
@@ -68,13 +83,17 @@ YUI_config = {
         // other groups here
     }
 };
-YUI().use('node','field-base', 'unit-ground', 'unit-test', 'unit-block', 'terrain-base', 'terrain-brick', function(Y){
+YUI().use('node', 'sys', 'field', 'unit-mobile', 'terrain', 'terrain-brick', 'terrain-ground', 'terrain-block', 'player', function(Y){
     var field = new Field({
         'container': Y.one('#field')
     });
     field.setMap('chaos');
-    field.on('anime', function(evt){
-        //alert('hihi');
-    });
     field.anime();
+    var player = new Player({
+        'id': 0,
+        'group': 0
+    });
+    player.addUnit('Mobile',{
+        'pos': {x:40, y:0, z:50}
+    });
 });
